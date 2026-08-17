@@ -1,10 +1,10 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
-import { connectDB } from './src/config/db.js';
-import { UserRouter } from './src/routes/authRoutes.js';
+import { connectDB } from './config/db.js';
+import { UserRouter } from './routes/authRoutes.js';
 import dns from 'node:dns'
-import { productRoutes } from './src/routes/productRoutes.js';
+import { productRoutes } from './routes/productRoutes.js';
 dns.setServers(['8.8.8.8','1.1.1.1'])
 // Environment variables configure karein
 dotenv.config();
