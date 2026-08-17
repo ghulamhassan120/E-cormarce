@@ -1,10 +1,10 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
-import { connectDB } from './config/db.js';
-import { UserRouter } from './routes/authRoutes.js';
+import { UserRouter } from './src/routes/authRoutes.js';
 import dns from 'node:dns'
-import { productRoutes } from './routes/productRoutes.js';
+import connectDB from './src/config/db.js'
+import { productRoutes } from './src/routes/productRoutes.js';
 dns.setServers(['8.8.8.8','1.1.1.1'])
 // Environment variables configure karein
 dotenv.config();
@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 });
 
 // Port configuration
-const PORT = process.env.PORT || 5000;
+// const PORT = process.env.PORT || 5000;
 
 // app.listen(PORT, () => {
 //   console.log(`Server is running on port ${PORT}`);
