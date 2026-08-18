@@ -1,5 +1,5 @@
 
-export const BASE_URL = 'http://localhost:5000';
+export const BASE_URL = 'https://e-cormarce-production.up.railway.app/';
 
 export const API_ENDPOINTS = {
   signup: `${BASE_URL}/api/auth/signup`,
