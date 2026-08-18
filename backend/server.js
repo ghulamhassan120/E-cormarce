@@ -26,11 +26,9 @@ app.get('/', (req, res) => {
   res.send('SHOP.CO Backend is running successfully!');
 });
 
-// Port configuration
-// const PORT = process.env.PORT || 5000;
+Port configuration
+const PORT = process.env.PORT || 5000;
 
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
-
-export default app
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
