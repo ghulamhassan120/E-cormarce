@@ -151,21 +151,21 @@ const fetchCartCount = async () => {
                 >
                   <Link
                     to="/shop/mens"
-                    onClick={() => setDropdownOpen(false)}
+                    onClick={() => setIsShopDropdownOpen(false)}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Men's Clothes
                   </Link>
                   <Link
                     to="/shop/womens"
-                    onClick={() => setDropdownOpen(false)}
+                    onClick={() => setIsShopDropdownOpen(false)}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Women's Clothes
                   </Link>
                   <Link
                     to="/shop/kids"
-                    onClick={() => setDropdownOpen(false)}
+                    onClick={() => setIsShopDropdownOpen(false)}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Kids Clothes
