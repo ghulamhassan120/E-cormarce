@@ -11,7 +11,7 @@ export default function KidsClothesPage() {
   useEffect(() => {
     const fetchKidsProducts = async () => {
       try {
-        const response = await axios.get(`${API_ENDPOINTS}/api/products`);
+        const response = await axios.get(`${API_ENDPOINTS.products}`);
         const filtered = response.data.filter(
           item => item.category?.toLowerCase() === 'kids' || item.category?.toLowerCase() === "kids' clothes"
         );

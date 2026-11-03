@@ -11,7 +11,7 @@ export default function OnSalePage() {
   useEffect(() => {
     const fetchSaleProducts = async () => {
       try {
-        const response = await axios.get(`${API_ENDPOINTS}/api/products`);
+        const response = await axios.get(`${API_ENDPOINTS.products}`);
         setSaleProducts(response.data);
       } catch (err) {
         console.error("Error fetching sale products:", err);

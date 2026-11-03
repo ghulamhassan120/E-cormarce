@@ -11,7 +11,7 @@ export default function NewArrivalsPage() {
   useEffect(() => {
     const fetchNewArrivals = async () => {
       try {
-        const response = await axios.get(`${API_ENDPOINTS}/api/products`);
+        const response = await axios.get(`${API_ENDPOINTS.products}`);
         setNewProducts(response.data);
       } catch (err) {
         console.error("Error fetching new arrivals:", err);

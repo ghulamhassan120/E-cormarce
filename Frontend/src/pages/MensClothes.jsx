@@ -12,7 +12,7 @@ export default function MensClothesPage() {
   useEffect(() => {
     const fetchMensProducts = async () => {
       try {
-        const response = await axios.get(`${API_ENDPOINTS}/api/products`);
+        const response = await axios.get(`${API_ENDPOINTS.products}`);
         // Agar backend mein category field 'Men' ya 'mens' hai toh filter kar lein
         const filtered = response.data.filter(
           item => item.category?.toLowerCase() === 'men' || item.category?.toLowerCase() === "men's clothes"
