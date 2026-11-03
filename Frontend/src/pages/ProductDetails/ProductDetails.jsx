@@ -71,7 +71,7 @@ export default function ProductDetailsPage() {
     return;
   }
     try {
-    const response = await axios.post('http://localhost:5000/api/cart/add', {
+    const response = await axios.post(`${API_ENDPOINTS}/api/cart/add`, {
       userId: userInfo.userId, 
       productId: product._id,
       quantity: quantity,

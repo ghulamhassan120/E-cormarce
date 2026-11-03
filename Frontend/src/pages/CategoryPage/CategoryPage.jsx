@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import FilterSidebar from '../../components/FilterSidebar/FilterSidebar';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../services/api';
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
@@ -17,7 +18,7 @@ export default function Shop() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/products`);
+        const res = await axios.get(`${API_ENDPOINTS}/api/products`);
         setProducts(res.data);
         setFilteredProducts(res.data);
       } catch (err) {

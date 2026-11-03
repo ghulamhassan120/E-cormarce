@@ -2,22 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../services/api';
 
 export default function KidsClothesPage() {
   const [kidsProducts, setKidsProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Backend se products fetch karke Kids category ke mutabiq filter karne ka function
   useEffect(() => {
     const fetchKidsProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products');
-        // Agar backend mein category field 'Kids' ya 'kids clothes' hai toh filter kar lein
+        const response = await axios.get(`${API_ENDPOINTS}/api/products`);
         const filtered = response.data.filter(
           item => item.category?.toLowerCase() === 'kids' || item.category?.toLowerCase() === "kids' clothes"
         );
         
-        // Agar filter ke baad empty ho (testing ke liye), toh saare products dikha dein taake UI khali na lage
         setKidsProducts(filtered.length > 0 ? filtered : response.data);
       } catch (err) {
         console.error("Error fetching kids' products:", err);

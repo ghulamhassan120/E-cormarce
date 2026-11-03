@@ -1,5 +1,5 @@
 
-export const BASE_URL = 'http://localhost:5000';
+export const BASE_URL = 'https://e-cormarce-8qgn.vercel.app';
 
 export const API_ENDPOINTS = {
   signup: `${BASE_URL}/api/auth/signup`,

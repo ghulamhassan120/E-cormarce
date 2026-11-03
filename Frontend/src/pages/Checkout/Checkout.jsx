@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { API_ENDPOINTS } from '../../services/api';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function CheckoutPage() {
     try {
       setLoading(true);
       
-      const response = await axios.post('http://localhost:5000/api/orders/create', {
+      const response = await axios.post(`${API_ENDPOINTS}/api/orders/create`, {
         userId: userInfo.userId,
         shippingAddress: formData,
         paymentMethod: formData.paymentMethod,

@@ -2,18 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../services/api';
 
 export default function OnSalePage() {
   const [saleProducts, setSaleProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Backend se sale wale products fetch karne ka function (Ya aap filter bhi laga sakte hain)
   useEffect(() => {
     const fetchSaleProducts = async () => {
       try {
-        // Misal ke taur par saare products fetch karke jinki discount > 0 ho
-        const response = await axios.get('http://localhost:5000/api/products');
-        // Agar aapke paas discount field hai to filter kar lein, warna saare dikha dein
+        const response = await axios.get(`${API_ENDPOINTS}/api/products`);
         setSaleProducts(response.data);
       } catch (err) {
         console.error("Error fetching sale products:", err);

@@ -2,22 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../services/api';
 
 export default function WomensClothesPage() {
   const [womensProducts, setWomensProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Backend se products fetch karke Women category ke mutabiq filter karne ka function
   useEffect(() => {
     const fetchWomensProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products');
-        // Agar backend mein category field 'Women' ya 'womens clothes' hai toh filter kar lein
+        const response = await axios.get(`${API_ENDPOINTS}/api/products`);
         const filtered = response.data.filter(
           item => item.category?.toLowerCase() === 'women' || item.category?.toLowerCase() === "women's clothes"
         );
         
-        // Agar filter ke baad empty ho (testing ke liye), toh saare products dikha dein taake UI khali na lage
         setWomensProducts(filtered.length > 0 ? filtered : response.data);
       } catch (err) {
         console.error("Error fetching women's products:", err);

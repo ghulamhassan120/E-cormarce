@@ -2,18 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../services/api';
 
 export default function NewArrivalsPage() {
   const [newProducts, setNewProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Backend se latest products fetch karne ka function
   useEffect(() => {
     const fetchNewArrivals = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products');
-        // Agar aapke paas createdAt ya sorting ka backend query hai to behtar hai, 
-        // warna saare products ya latest slice dikha sakte hain
+        const response = await axios.get(`${API_ENDPOINTS}/api/products`);
         setNewProducts(response.data);
       } catch (err) {
         console.error("Error fetching new arrivals:", err);

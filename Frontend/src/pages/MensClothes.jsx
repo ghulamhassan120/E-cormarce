@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../services/api';
 
 export default function MensClothesPage() {
   const [mensProducts, setMensProducts] = useState([]);
@@ -11,7 +12,7 @@ export default function MensClothesPage() {
   useEffect(() => {
     const fetchMensProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products');
+        const response = await axios.get(`${API_ENDPOINTS}/api/products`);
         // Agar backend mein category field 'Men' ya 'mens' hai toh filter kar lein
         const filtered = response.data.filter(
           item => item.category?.toLowerCase() === 'men' || item.category?.toLowerCase() === "men's clothes"

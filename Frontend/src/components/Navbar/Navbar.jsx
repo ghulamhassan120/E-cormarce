@@ -47,7 +47,7 @@ const fetchCartCount = async () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/cart/${userId}`,
+          `${API_ENDPOINTS}/api/cart/${userId}`,
         );
         if (response.data && response.data.items) {
           // Saare items ki quantity ko sum (plus) kar lein
