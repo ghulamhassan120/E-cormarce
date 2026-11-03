@@ -3,13 +3,17 @@ import { motion } from 'framer-motion';
 import ProductCard from '../ProductCard/ProductCard';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../../services/api';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 export default function NewArrivalsSection({Title}) {
    const [allProducts, setAllProducts] = useState([]);
+   const router=useNavigate()
     useEffect(() => {
     async function foo() {
       const response = await axios.get(API_ENDPOINTS.products);
       setAllProducts(response.data);
+
     }
     foo();
   }, []);
@@ -48,7 +52,7 @@ export default function NewArrivalsSection({Title}) {
 
         {/* View All Button */}
         {visibleCount < allProducts.length && (
-          <motion.div 
+          <Link to={"/productcategory"}>  <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.8 }}
@@ -56,12 +60,14 @@ export default function NewArrivalsSection({Title}) {
             className="mt-12 sm:mt-16 text-center"
           >
             <button 
-              onClick={loadMoreProducts}
+              // onClick={router("/productcategory")}
               className="w-full sm:w-auto px-14 py-4 border border-gray-200 rounded-full text-black font-medium text-sm hover:bg-black hover:text-white transition-colors duration-300"
             >
               View All ({allProducts.length - visibleCount} more)
             </button>
           </motion.div>
+          </Link>
+        
         )}
       </div>
     </section>

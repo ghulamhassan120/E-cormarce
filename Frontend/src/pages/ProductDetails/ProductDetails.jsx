@@ -10,32 +10,82 @@ import YouMightAlsoLike from "../../components/YouMightAlsoLike/YouMightAlsoLike
 import { useEffect } from "react";
 import axios from "axios";
 import { API_ENDPOINTS } from "../../services/api.js";
-
+import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 export default function ProductDetailsPage() {
-  const [product, setproduct] = useState([]);
+  const { id } = useParams();
+  const [product, setProducts] = useState(null);
   console.log(product);
 
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
+  const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("Large");
 
   useEffect(() => {
-    async function foo() {
-      const response = await axios.get(API_ENDPOINTS.products);
-      setproduct(response.data);
-    }
-    foo();
-  }, []);
-  const handleAddToCart = (quantity) => {
-    const cartData = {
-      productId: product.id,
-      name: product.name,
-      price: product.price,
-      color: selectedColor,
-      size: selectedSize,
-      quantity,
+    const fetchProduct = async () => {
+      try {
+        console.log("API URL:", API_ENDPOINTS.products);
+
+        const response = await axios.get(`${API_ENDPOINTS.products}/${id}`);
+
+        console.log("API response:", response.data);
+
+        // Agar API array return karti hai:
+        const data = response.data;
+        const firstProduct = Array.isArray(data)
+          ? data[0]
+          : (data.product ?? data);
+
+        if (!firstProduct) {
+          console.error("API se product nahi mila");
+          return;
+        }
+
+        setProducts(firstProduct);
+      } catch (error) {
+        console.error(
+          "API fetch error:",
+          error.response?.data || error.message,
+        );
+      }
     };
-    console.log("Cart Data:", cartData);
-    alert("Added to cart successfully!");
+
+    fetchProduct();
+  }, []);
+
+  useEffect(() => {
+    if (product?.colors?.length) {
+      setSelectedColor(product.colors[0]);
+    }
+
+    console.log("Product state updated:", product);
+  }, [product]);
+
+  console.log("Current product:", product);
+  if (!product) {
+    return <p>Loading product...</p>;
+  }
+  const handleAddToCart =async (quantity) => {
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    if (!userInfo) {
+    toast.warning('Please login first to add items to cart!');
+    return;
+  }
+    try {
+    const response = await axios.post('http://localhost:5000/api/cart/add', {
+      userId: userInfo.userId, 
+      productId: product._id,
+      quantity: quantity,
+      size: selectedSize, 
+      color: selectedColor 
+    });
+
+    toast.success('Product added to cart successfully!');
+    window.dispatchEvent(new Event('cartUpdated'));
+    console.log(response.data);
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    toast.error('Failed to add product to cart.');
+  }
   };
 
   return (

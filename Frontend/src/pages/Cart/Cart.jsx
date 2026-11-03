@@ -1,16 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tag, ArrowRight } from 'lucide-react';
 import CartItem from '../../components/CartItem/CartItem';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: 'Gradient Graphic T-shirt', image: 'gradient_tshirt.png', size: 'Large', color: 'White', price: 145, quantity: 1 },
-    { id: 2, name: 'Checkered Shirt', image: 'checkered_shirt.png', size: 'Medium', color: 'Red', price: 180, quantity: 1 },
-    { id: 3, name: 'Skinny Fit Jeans', image: 'skinny_jeans.png', size: 'Large', color: 'Blue', price: 240, quantity: 1 },
-  ]);
-
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [promoCode, setPromoCode] = useState('');
+  const navigate=useNavigate()
+  console.log(cartItems)
+  // Safe JSON parse for userInfo
+  const storedUser = localStorage.getItem('userInfo');
+  const userInfo = storedUser && storedUser !== "undefined" ? JSON.parse(storedUser) : null;
+
+  // Get user ID safely (backend response ke mutabiq userInfo.user.id ya userInfo.userId)
+  const userId = userInfo?.user?.id || userInfo?.userId;
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      if (!userId) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
+        
+        // Backend se jo cart data aa raha hai usme items array hoti hai
+        if (response.data && response.data.items) {
+          // Hum items ko map karke frontend friendly format bana lenge
+          const formattedItems = response.data.items.map(item => ({
+            id: item.productId?._id || item._id,
+            productId: item.productId?._id,
+            name: item.productId?.name || "Product Name",
+            price: item.productId?.price || 0,
+            image: item.productId?.images?.[0] || "",
+            size: item.size || 'Large',
+            color: item.color || 'Default',
+            quantity: item.quantity || 1
+          }));
+          setCartItems(formattedItems);
+        }
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching cart:", err);
+        setLoading(false);
+      }
+    };
+    fetchCart();
+  }, [userId]);
 
   const handleUpdateQty = (id, type) => {
     setCartItems(prev => prev.map(item => {
@@ -23,15 +62,32 @@ export default function Cart() {
   };
 
   // Remove Item Handler
-  const handleRemoveItem = (id) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
-  };
+ const handleRemoveItem = async (productId, size, color) => {
+  try {
+    // Backend se delete karne ki request
+    await axios.delete('http://localhost:5000/api/cart/remove', {
+      data: { userId, productId, size, color }
+    });
+
+    // Frontend state se bhi foran remove kar dein taake UI update ho jaye
+    setCartItems(prev => prev.filter(item => 
+      !(item.productId === productId && item.size === size && item.color === color)
+    ));
+
+    window.dispatchEvent(new Event('cartUpdated'));
+  } catch (err) {
+    console.error("Error removing item from cart:", err);
+    alert("Failed to remove item from cart.");
+  }
+};
 
   // Calculations
   const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const discount = Math.round(subtotal * 0.20); 
   const deliveryFee = subtotal > 0 ? 15 : 0;
   const total = subtotal > 0 ? subtotal - discount + deliveryFee : 0;
+
+  if (loading) return <div className="text-center py-20 font-medium">Loading cart...</div>;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -73,7 +129,7 @@ export default function Cart() {
                   key={item.id} 
                   item={item} 
                   onUpdateQty={handleUpdateQty} 
-                  onRemove={handleRemoveItem} 
+                  onRemove={() => handleRemoveItem(item.productId, item.size, item.color)} 
                 />
               ))}
             </AnimatePresence>
@@ -129,6 +185,7 @@ export default function Cart() {
           <motion.button 
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
+            onClick={()=>navigate("/checkout")}
             className="w-full bg-black text-white font-medium py-4 rounded-full hover:bg-gray-900 transition-colors flex items-center justify-center space-x-2 cursor-pointer shadow-md"
           >
             <span>Go to Checkout</span>

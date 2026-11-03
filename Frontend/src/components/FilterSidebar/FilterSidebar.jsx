@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { SlidersHorizontal, ChevronRight, ChevronUp } from 'lucide-react';
 
-export default function FilterSidebar() {
-  const [selectedColor, setSelectedColor] = useState('#2563EB'); // Default blue with check
-  const [selectedSizes, setSelectedSizes] = useState(['Large']);
-  const [priceRange, setPriceRange] = useState(200);
+export default function FilterSidebar({selectedCategory, 
+  setSelectedCategory, 
+  priceRange, 
+  setPriceRange, 
+  selectedColor, 
+  setSelectedColor, 
+  selectedSizes, 
+  setSelectedSizes,
+  onApplyFilters}) {
+ 
 
   const categories = ['T-shirts', 'Shorts', 'Shirts', 'Hoodie', 'Jeans'];
   const colorsList = ['#00C12B', '#F50606', '#F5DD06', '#F57906', '#06CAF5', '#2563EB', '#7F00FF', '#FF007F', '#FFFFFF', '#000000'];
@@ -31,7 +37,11 @@ export default function FilterSidebar() {
       {/* Categories List */}
       <div className="space-y-4 pb-6 border-b border-gray-200 text-gray-600 text-sm font-medium">
         {categories.map((cat, index) => (
-          <div key={index} className="flex items-center justify-between cursor-pointer hover:text-black transition-colors">
+          <div 
+            key={index} 
+            onClick={() => setSelectedCategory(cat)}
+            className={`flex items-center justify-between cursor-pointer transition-colors ${selectedCategory === cat ? 'text-black font-bold' : 'hover:text-black'}`}
+          >
             <span>{cat}</span>
             <ChevronRight className="w-4 h-4 text-gray-400" />
           </div>
@@ -39,7 +49,7 @@ export default function FilterSidebar() {
       </div>
 
       {/* Price Slider Section */}
-      <div className="py-6 border-b border-gray-200">
+     <div className="py-6 border-b border-gray-200">
         <div className="flex items-center justify-between font-bold text-black mb-4">
           <span>Price</span>
           <ChevronUp className="w-4 h-4 text-gray-400 cursor-pointer" />
@@ -49,7 +59,7 @@ export default function FilterSidebar() {
           min="50" 
           max="500" 
           value={priceRange} 
-          onChange={(e) => setPriceRange(e.target.value)}
+          onChange={(e) => setPriceRange(Number(e.target.value))}
           className="w-full accent-black cursor-pointer"
         />
         <div className="flex justify-between text-xs text-gray-500 font-semibold mt-2">
@@ -59,7 +69,7 @@ export default function FilterSidebar() {
       </div>
 
       {/* Colors Section */}
-      <div className="py-6 border-b border-gray-200">
+    <div className="py-6 border-b border-gray-200">
         <div className="flex items-center justify-between font-bold text-black mb-4">
           <span>Colors</span>
           <ChevronUp className="w-4 h-4 text-gray-400 cursor-pointer" />
@@ -81,14 +91,14 @@ export default function FilterSidebar() {
       </div>
 
       {/* Size Section */}
-      <div className="py-6 border-b border-gray-200">
+    <div className="py-6 border-b border-gray-200">
         <div className="flex items-center justify-between font-bold text-black mb-4">
           <span>Size</span>
           <ChevronUp className="w-4 h-4 text-gray-400 cursor-pointer" />
         </div>
         <div className="flex flex-wrap gap-2">
           {sizesList.map((size, index) => {
-            const isSelected = selectedSizes.includes(size);
+            const isSelected = selectedSizes?.includes(size);
             return (
               <button
                 key={index}
@@ -119,8 +129,11 @@ export default function FilterSidebar() {
       </div>
 
       {/* Apply Filter Button */}
-      <div className="pt-6">
-        <button className="w-full bg-black text-white font-medium py-3.5 rounded-full hover:bg-gray-900 transition-colors text-center shadow-sm cursor-pointer">
+     <div className="pt-6">
+        <button 
+          onClick={onApplyFilters}
+          className="w-full bg-black text-white font-medium py-3.5 rounded-full hover:bg-gray-900 transition-colors text-center shadow-sm cursor-pointer"
+        >
           Apply Filter
         </button>
       </div>

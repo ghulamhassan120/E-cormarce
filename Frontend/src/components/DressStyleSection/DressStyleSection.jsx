@@ -13,7 +13,6 @@ export default function DressStyleSection() {
     },
     {
       id: 2,
-      title: 'Formal',
       image: image2,
       className: 'md:col-span-2 h-[280px] sm:h-[320px]', 
     },
@@ -24,7 +23,7 @@ export default function DressStyleSection() {
     },
     {
       id: 4,
-      title: 'Gym',
+       title: 'Formal',
       image: image4,
       className: 'md:col-span-1 h-[280px] sm:h-[320px]', 
     },
@@ -64,7 +63,7 @@ export default function DressStyleSection() {
               <img 
                 src={style.image} 
                 alt={style.title} 
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full  object-center group-hover:scale-105 transition-transform duration-500"
               />
             </motion.div>
           ))}

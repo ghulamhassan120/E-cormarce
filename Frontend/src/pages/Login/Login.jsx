@@ -4,6 +4,7 @@ import { Mail, Lock, Eye, EyeOff, X, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { API_ENDPOINTS } from '../../services/api';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 export default function LoginModal({ isOpen, onClose ,onSwitchToSignup}) {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,12 +23,28 @@ export default function LoginModal({ isOpen, onClose ,onSwitchToSignup}) {
     setLoading(true);
 
     try {
-      const response = await axios.post(API_ENDPOINTS.login, formData);
+          const response = await fetch(API_ENDPOINTS.login, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: formData.name,
+              email: formData.email,
+              password: formData.password,
+            }),
+          });
+      
+          const data = await response.json();
+      
+          if (!response.ok) {
+            throw new Error(data.message || data.error || 'Something went wrong!');
+          }
 
       setLoading(false);
-      alert('Logged in successfully!');
+      toast.success('Logged in successfully!');
       
-      localStorage.setItem('userInfo', JSON.stringify(response.data));
+      localStorage.setItem('userInfo', JSON.stringify(data));
       
       setFormData({ email: '', password: '' });
       onClose();
@@ -37,7 +54,7 @@ export default function LoginModal({ isOpen, onClose ,onSwitchToSignup}) {
       console.error('Error:', error);
       
       const errorMessage = error.response?.data?.message || 'Invalid credentials or server error!';
-      alert(errorMessage);
+      toast.error(errorMessage);
     }
   };
   return (

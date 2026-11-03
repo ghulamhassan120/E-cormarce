@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, User, Eye, EyeOff, X, ArrowRight } from 'lucide-react';
 import { API_ENDPOINTS } from '../../services/api.js';
 import axios from 'axios'
+import { toast } from 'sonner';
 
 export default function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,28 +19,43 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
   };
 
 const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const response = await axios.post(API_ENDPOINTS.signup, formData);
+  try {
+    const response = await fetch(API_ENDPOINTS.signup, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      }),
+    });
 
-      setLoading(false);
-      alert('Account created successfully!');
-      
-      localStorage.setItem('userInfo', JSON.stringify(response.data));
-      
-      setFormData({ name: '', email: '', password: '' });
-      onClose();
-      
-    } catch (error) {
-      setLoading(false);
-      console.error('Error:', error);
-      
-      const errorMessage = error.response?.data?.message || 'Server error, please check if backend is running.';
-      alert(errorMessage);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || data.error || 'Something went wrong!');
     }
-  };
+
+    console.log("Response:", data);
+    setLoading(false);
+    toast.success('Account created successfully!');
+    
+    localStorage.setItem('userInfo', JSON.stringify(data));
+    
+    setFormData({ name: '', email: '', password: '' });
+    onClose();
+
+  } catch (error) {
+    setLoading(false);
+    console.error('Error:', error.message);
+    toast.error(error.message || 'Server error, please check if backend is running.');
+  }
+};
 
   return (
     <AnimatePresence>
