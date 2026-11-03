@@ -5,4 +5,6 @@ export const API_ENDPOINTS = {
   signup: `${BASE_URL}/api/auth/signup`,
   login: `${BASE_URL}/api/auth/login`,
   products: `${BASE_URL}/api/products`,
+  cart: `${BASE_URL}/api/cart`,
+  orders: `${BASE_URL}/api/orders`,
 };

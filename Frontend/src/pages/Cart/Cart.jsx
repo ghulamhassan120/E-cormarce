@@ -26,7 +26,7 @@ export default function Cart() {
         return;
       }
       try {
-        const response = await axios.get(`${API_ENDPOINTS}/api/cart/${userId}`);
+        const response = await axios.get(`${API_ENDPOINTS.cart}/${userId}`);
         
         // Backend se jo cart data aa raha hai usme items array hoti hai
         if (response.data && response.data.items) {
@@ -66,7 +66,7 @@ export default function Cart() {
  const handleRemoveItem = async (productId, size, color) => {
   try {
     // Backend se delete karne ki request
-    await axios.delete(`${API_ENDPOINTS}/api/cart/remove`, {
+    await axios.delete(`${API_ENDPOINTS.cart}/remove`, {
       data: { userId, productId, size, color }
     });
 

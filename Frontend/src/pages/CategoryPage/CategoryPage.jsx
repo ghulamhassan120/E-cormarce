@@ -18,7 +18,7 @@ export default function Shop() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(`${API_ENDPOINTS}/api/products`);
+        const res = await axios.get(`${API_ENDPOINTS.products}`);
         setProducts(res.data);
         setFilteredProducts(res.data);
       } catch (err) {

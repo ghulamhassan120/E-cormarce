@@ -16,6 +16,7 @@ import LoginModal from "../../pages/Login/Login";
 import SignupModal from "../../pages/Signup/Signup"; // Corrected import reference
 import axios from "axios";
 import { toast } from "sonner";
+import { API_ENDPOINTS } from "../../services/api";
 const MotionLink = motion(Link);
 export default function Navbar() {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const fetchCartCount = async () => {
 
       try {
         const response = await axios.get(
-          `${API_ENDPOINTS}/api/cart/${userId}`,
+          `${API_ENDPOINTS.cart}/${userId}`,
         );
         if (response.data && response.data.items) {
           // Saare items ki quantity ko sum (plus) kar lein

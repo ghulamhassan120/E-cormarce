@@ -37,7 +37,7 @@ export default function CheckoutPage() {
     try {
       setLoading(true);
       
-      const response = await axios.post(`${API_ENDPOINTS}/api/orders/create`, {
+      const response = await axios.post(`${API_ENDPOINTS.orders}/create`, {
         userId: userInfo.userId,
         shippingAddress: formData,
         paymentMethod: formData.paymentMethod,
